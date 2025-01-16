@@ -6,3 +6,6 @@ Students are welcome to use this repo as a resource while they are working on th
 It contains up-to-date code from anything demonstrated during class sessions. 
 
 Look closely through the code for extensive comments of what the code does and why it's coded that way. 
+
+It contains a 2D project and a 3D project, similar to your own 202 repositories.
+Scenes contain different "projects", or aspects of the class.
