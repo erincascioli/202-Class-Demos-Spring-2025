@@ -1,0 +1,45 @@
+{
+    "name": "Game Controls",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "4980ea4a-9865-4878-a2b4-b1b699cb5f90",
+            "actions": [
+                {
+                    "name": "Send Message",
+                    "type": "Button",
+                    "id": "88196bed-3a3d-4404-bdde-5e03c28eefb5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "20cdfaa0-d1d1-416f-9bc4-f6bd18fa6781",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Send Message",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "00328d75-2060-477a-9c87-b95b9fbc44a7",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Send Message",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
