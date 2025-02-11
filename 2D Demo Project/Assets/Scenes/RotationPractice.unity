@@ -163,9 +163,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 908722345}
-  - component: {fileID: 908722344}
   - component: {fileID: 908722347}
   - component: {fileID: 908722346}
+  - component: {fileID: 908722348}
   m_Layer: 0
   m_Name: JellyfishManager
   m_TagString: Untagged
@@ -173,21 +173,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &908722344
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 908722343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e05b88506fe3884392134471fb64e8b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fish: {fileID: 385622944}
-  speed: 0.01
-  angleOfRotation: 0
 --- !u!4 &908722345
 Transform:
   m_ObjectHideFlags: 0
@@ -244,6 +229,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 88196bed-3a3d-4404-bdde-5e03c28eefb5
     m_ActionName: Player/Send Message[/Mouse/leftButton,/Keyboard/w]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 908722348}
+        m_TargetAssemblyTypeName: FishMovement_WithVectors, Assembly-CSharp
+        m_MethodName: GetDirection
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: b0789cd2-4f43-4509-96a3-d3f6f56dcfe0
+    m_ActionName: Player/Move Fish[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -262,6 +263,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   messageToSend: I am sending this message!
+--- !u!114 &908722348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 908722343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aecb8eabefb51d4e8f186bb48df8070, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishDirection: {x: 0, y: 0}
+  velocity: {x: 0, y: 0, z: 0}
+  speed: 0.01
+  fish: {fileID: 385622944}
 --- !u!1 &947182241
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,7 +397,7 @@ Transform:
   m_GameObject: {fileID: 1796121055}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -4.75, y: -2.81, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
