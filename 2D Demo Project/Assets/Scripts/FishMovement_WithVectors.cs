@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 //   in the Input Actions asset.
 //
 // This component is on the Jellyfish Manager empty GO.
-// References the fish to locomote.
+// References the fish to locomote on a speed per second.
 // ----------------------------------------------------------------------------
 
 
@@ -27,7 +27,14 @@ public class FishMovement_WithVectors : MonoBehaviour
     public GameObject fish;
 
     /// <summary>
-    /// Direction for movement
+    /// Reference to the SpriteRenderer of the jellyfish sprite.
+    /// Used to change the tint every # seconds.
+    /// </summary>
+    public SpriteRenderer fishSprite;
+
+    /// <summary>
+    /// Direction for movement.
+    /// Derived from the new Input package system.
     /// </summary>
     public Vector2 fishDirection;
 
@@ -37,25 +44,35 @@ public class FishMovement_WithVectors : MonoBehaviour
     public Vector3 velocity;
 
     /// <summary>
-    /// Number of units to move per frame
+    /// Number of units to move per second
     /// </summary>
-    public float speed;
+    public float speedPerSecond;
+
+    /// <summary>
+    /// Timer of elapsed time; number of seconds that have passed.
+    /// </summary>
+    public float timer;
+
+    /// <summary>
+    /// How often to reset the timer.
+    /// </summary>
+    public float timerInterval;
 
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Transport the fish to a new location.
         MoveFish();
+
+        // Is it time to change the jellyfish sprite's color tint?
+        ChangeJellyFishColor();
     }
 
-    
     public void MoveFish()
     {
         // --------------------------------------------------------------------
@@ -67,9 +84,13 @@ public class FishMovement_WithVectors : MonoBehaviour
         //    - This is done for us with the Input Package system's GetDirection method.
         //    - The direction is a 2D vector.
 
-        // 2. Calculate a velocity --> direction * speed
-        //    - Velocity is direction * speed
-        velocity = fishDirection * speed;
+        // --------------------------------------------------------------------
+        // Movement is now framerate independent using delta time!!!
+        // --------------------------------------------------------------------
+        // 2. Calculate a velocity --> direction * speed * time
+        //    - Multiplying by delta time sets the movement to be frame-rate independent
+        //      by focusing on movement per second.
+        velocity = (fishDirection * speedPerSecond) * Time.deltaTime;
 
         // 3. Calculate a new position --> velocity added to position
         //    - Set the fish's position to that vector
@@ -100,5 +121,35 @@ public class FishMovement_WithVectors : MonoBehaviour
         // Testing: Inspect the values that are being returned by ReadValue.
         Debug.Log("The direction is " + fishDirection);
     }
-    
+
+
+    /// <summary>
+    /// Simple frame count timer.
+    /// </summary>
+    public void ChangeJellyFishColor()
+    {
+        // --------------------------------------------------------------------
+        // Capture the elapsed time from last frame to this one
+        // This will increase every frame, until the value is reset.
+        // --------------------------------------------------------------------
+
+        timer += Time.deltaTime;
+
+        // --------------------------------------------------------------------
+        // After # seconds have passed, something happens!
+        // --------------------------------------------------------------------
+
+        // Once timer has passed the interval
+        if (timer >= timerInterval)
+        {
+            // Reset the timer (include lost time here)
+            timer -= timerInterval;
+
+            // Change the color tint of the Jellyfish from its SpriteRenderer component
+            fishSprite.color = new Color(
+                Random.Range(0, 1f), 
+                Random.Range(0, 1f), 
+                Random.Range(0, 1f));
+        }
+    }    
 }
