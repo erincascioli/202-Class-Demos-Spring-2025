@@ -44,7 +44,7 @@ public class RandomTechniques : MonoBehaviour
 
         // Every 2 seconds, spawn a new shape with NonUniformSpawn() method.
         timer += Time.deltaTime;
-        if(timer > 2)
+        if(timer > 1)
         {
             NonUniformSpawn();
             timer = 0;
@@ -89,13 +89,13 @@ public class RandomTechniques : MonoBehaviour
         // All that code could be reduced to this, if a list (or other collection)
         //   of prefabs is used!
         // ********************************************************************
-        /*
+        
         int randomIndex = Random.Range(0, prefabList.Count);  // 0, 1 or 2 (whatever to the count of list)
         spawnedShape = Instantiate(
                 prefabList[randomIndex],
                 Vector3.zero,
                 Quaternion.identity);
-        */
+        
     }
 
 
