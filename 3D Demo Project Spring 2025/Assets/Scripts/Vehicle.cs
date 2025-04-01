@@ -9,7 +9,7 @@ public class Vehicle : MonoBehaviour
     // Reference to Rigidbody on this GameObject
     // NOTE: We still call methods on the Rigidbody even though 
     //   it's not using the physics system’s auto-applied physics.
-    public Rigidbody rigidbody;
+    public Rigidbody rigidbodyComponent;
 
     // Part of “movement formula” we've studied thus far
     [SerializeField]
@@ -30,7 +30,7 @@ public class Vehicle : MonoBehaviour
 
     // Steering the vehicle 
     public float turnSpeed;         // scalar of velocity
-    private Quaternion turning;		// rotation
+    public Quaternion turning;		// rotation
 
     void Start()
     {
@@ -69,7 +69,7 @@ public class Vehicle : MonoBehaviour
         velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
 
         // How to affect position?
-        rigidbody.MovePosition(transform.position + velocity);
+        rigidbodyComponent.MovePosition(transform.position + velocity);
     }
 
     public void Move2()
@@ -110,11 +110,23 @@ public class Vehicle : MonoBehaviour
             }
         }
 
-        // Scale the Velocity to be based on Time not Frame rate
-        Vector3 delta = velocity * Time.fixedDeltaTime;
+        //  Calc current turning:
+        // Rotates around the X axis
+        turning = Quaternion.Euler(0f,
+            movementDirection.x * turnSpeed * Time.fixedDeltaTime, 0f);
 
-        // Move the Vehicle
-        rigidbody.MovePosition(transform.position + delta);
+        //  Calc current turning
+        Quaternion nextRotation = transform.rotation * turning;
+
+        //  Turn the Vehicle's velocity
+        velocity = turning * velocity;
+
+        //  Use velocity to calc next position
+        Vector3 nextPosition = transform.position +
+            (velocity * Time.fixedDeltaTime);
+
+        //  Move and rotate the Vehicle
+        rigidbodyComponent.Move(nextPosition, nextRotation);
     }
 
     public void OnMove(InputAction.CallbackContext context)

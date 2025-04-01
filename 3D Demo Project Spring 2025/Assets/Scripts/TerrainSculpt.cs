@@ -4,66 +4,91 @@ using UnityEngine;
 
 public class TerrainSculpt : MonoBehaviour
 {
+    /// <summary>
+    /// Access to the Terrain's heightmap
+    /// </summary>
     public TerrainData terrainData;
-    public float perlinStep = 0.01f;
+
+    /// <summary>
+    /// Float array that holds values between 0 and 1. 
+    /// Used for setting heightmap values.
+    /// </summary>
+    private float[,] heightmapValues;
+
+    /// <summary>
+    /// Change in time step for retrieving Perlin values
+    /// </summary>
+    public float timeStep;
+
 
     void Start()
     {
-        SetTerrainValues();
+        // Random.Range generates uniformly random height values
+        //SetRandomHeights();
+
+        // Perlin noise generates smooth height changes
+        SetPerlinRandomHeights();
     }
 
-    void Update()
+
+    /// <summary>
+    /// Fills the Terrain's heightmap with randomly generated values between 0 and 1.
+    /// </summary>
+    public void SetRandomHeights()
     {
-        
+        // Initialize the array of heightmap values
+        heightmapValues = 
+            new float[terrainData.heightmapResolution, terrainData.heightmapResolution];
+
+        // Generate random values for all vertices in the Terrain mesh
+        for(int row = 0; row < terrainData.heightmapResolution; row++)
+        {
+            for(int col = 0; col < terrainData.heightmapResolution; col++)
+            {
+                heightmapValues[row, col] = Random.Range(0f, 1f);
+            }
+        }
+
+        // Pass data to the Terrain
+        terrainData.SetHeights(0, 0, heightmapValues);
     }
 
-    public void SetTerrainValues()
+
+    /// <summary>
+    /// Fills the Terrain's heightmap with values between 0 and 1.
+    /// </summary>
+    public void SetPerlinRandomHeights()
     {
         // Requires:
-        // X and Y bases (remembering that a Terrain is a 2D mesh!) correspond to
-        //   rows and columns in the array
-        // array of floats that will be assigned to the terrain
+        // 1) X and Y base (remembering that a Terrain is a 2D mesh!) correspond to
+        //   starting row and column in the heightmap values array
+        // 2) array of floats that will be assigned to the terrain
         //    where the array size should match the Terrain resolution (1024 x 1024)
 
-        int terrainResolution = terrainData.heightmapResolution;        //1024
-        float[,] heightValues = new float[terrainResolution, terrainResolution];
+        // Initialize the array of heightmap values
+        heightmapValues =
+            new float[terrainData.heightmapResolution, terrainData.heightmapResolution];
 
-        /*
-        // Try this with completely random values, where the heights are between 0 and 1.
-        for(int x = 0; x < terrainResolution; x++)
+        // Use these coordinates for sampling different values at increasing points in time.
+        float xCoordinate = 0;
+        float yCoordinate = 0;
+
+        // Generate random values for all vertices in the Terrain mesh
+        for (int row = 0; row < terrainData.heightmapResolution; row++)
         {
-            for(int y = 0; y < terrainResolution; y++)
+            for (int col = 0; col < terrainData.heightmapResolution; col++)
             {
-                heightValues[x, y] = Random.Range(0f, 1f);
-            }
-        }
-        */
-
-        // Now, try this with Perlin noise!
-        float perlinX = 0f;
-        float perlinY = 0f;
-
-        // Go row by row down the Perlin noise array of values
-        for (int x = 0; x < terrainResolution; x++)
-        {
-            // Iterate through each column in the row
-            for (int y = 0; y < terrainResolution; y++)
-            {
-                // Sample the value at that (x,y) coordinate in the Perlin array
-                heightValues[x, y] = 
-                    Mathf.PerlinNoise(perlinX, perlinY);
-
-                // Increase the column for each vertex
-                perlinY += perlinStep;
+                // Increase the x coordinate by the time step and sample at that spot
+                xCoordinate += timeStep;
+                heightmapValues[row, col] = Mathf.PerlinNoise(xCoordinate, yCoordinate);
             }
 
-            // Ready for the next row?
-            // Reset the column back to 0
-            // And increase the row by 1.
-            perlinX += perlinStep;
-            perlinY = 0f;
+            // Reset the "column" and increase the "row" 
+            xCoordinate = 0;
+            yCoordinate += timeStep;
         }
 
-        terrainData.SetHeights(0, 0, heightValues);
+        // Pass data to the Terrain
+        terrainData.SetHeights(0, 0, heightmapValues);
     }
 }
