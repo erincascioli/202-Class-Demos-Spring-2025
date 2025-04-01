@@ -179,6 +179,7 @@ MonoBehaviour:
   decelerationRate: 0.95
   turnSpeed: 40
   turning: {x: 0, y: 0, z: 0, w: 0}
+  terrainData: {fileID: 15600000, guid: 24b87acbf94096a4b86a27e1ace34eec, type: 2}
 --- !u!54 &462586786
 Rigidbody:
   m_ObjectHideFlags: 0

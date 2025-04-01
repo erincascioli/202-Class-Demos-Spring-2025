@@ -29,8 +29,11 @@ public class Vehicle : MonoBehaviour
     public float decelerationRate;
 
     // Steering the vehicle 
-    public float turnSpeed;         // scalar of velocity
-    public Quaternion turning;		// rotation
+    public float turnSpeed;             // scalar of velocity
+    public Quaternion turning;		    // rotation
+
+    // Positioning on terrain
+    public TerrainData terrainData;     // Set in inspector
 
     void Start()
     {
@@ -43,8 +46,10 @@ public class Vehicle : MonoBehaviour
 
     public void FixedUpdate()
     {
+        PositionVehicleAtTerrainHeight();
+
         //Move1();
-        Move2();
+        //Move2();
     }
 
     public void Move1()
@@ -127,6 +132,61 @@ public class Vehicle : MonoBehaviour
 
         //  Move and rotate the Vehicle
         rigidbodyComponent.Move(nextPosition, nextRotation);
+    }
+
+    /// <summary>
+    /// Positions a vehicle at the terrain's height
+    /// </summary>
+    public void PositionVehicleAtTerrainHeight()
+    {
+        // ********************************************************************
+        // Option 1: Get the terrain height at an (X, Z) position
+        // ********************************************************************
+        /*
+        // Ask for the height of a terrain at the vehicle's position
+        float terrainHeight = 
+        terrainData.GetHeight((int)transform.position.x, (int)transform.position.z);
+
+        // Move the vehicle to a position on the terrain
+        transform.position = new Vector3(
+            transform.position.x,
+            terrainHeight,
+            transform.position.z);
+
+        // Let's see what the value is:
+        Debug.Log("Value at (100, 100) is " + terrainHeight);
+        */
+
+
+        // ********************************************************************
+        // Optoin 2: Get the terrain height using raycast
+        // ********************************************************************
+        RaycastHit raycastData; 
+
+        // Find a position 200 units directly above the vehicle
+        Vector3 aboveVehicle = new Vector3(
+            transform.position.x,
+            200,
+            transform.position.z);
+
+        // Send a ray "down" into the terrain
+        Physics.Raycast(aboveVehicle, Vector3.down, out raycastData, 200);
+
+        // Let's see what the value is:
+        Debug.Log("Value at (100, 100) is " + raycastData.point);
+
+        // Move the vehicle to a position on the terrain
+        transform.position = new Vector3(
+            transform.position.x,
+            raycastData.point.y,
+            transform.position.z);
+
+        // Blue line from vehicle center to the end of its forward endpoint
+        //   used for debugging!
+        Debug.DrawLine(
+            transform.position,                                 // Vehicle's center
+            transform.position + (transform.right * 5),         // 5 units to the right 
+            Color.blue);
     }
 
     public void OnMove(InputAction.CallbackContext context)
