@@ -221,7 +221,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocity: {x: 0, y: 0, z: 0}
   acceleration: {x: 0, y: 0, z: 0}
-  maxSpeed: 2
+  maxSpeed: 100
+  maxForce: 100
   target: {fileID: 1264811324}
 --- !u!1 &576645657
 GameObject:
